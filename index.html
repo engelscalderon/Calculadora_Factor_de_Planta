@@ -69,15 +69,33 @@
                     </div>
                 </div>
 
-                <!-- Input: Tiempo -->
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Tiempo del Periodo (Horas)</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                            <i class="fa-solid fa-clock"></i>
+                <div class="border-t border-gray-100 pt-4 grid grid-cols-2 gap-3">
+                    <!-- Selector: Periodicidad del Periodo -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Periodicidad</label>
+                        <div class="relative rounded-xl shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <select id="periodicidad" onchange="actualizarHorasPorPeriodo()" 
+                                class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm font-semibold text-gray-700 cursor-pointer">
+                                <option value="anual" selected>Anual</option>
+                                <option value="mensual">Mensual</option>
+                                <option value="diario">Diario</option>
+                            </select>
                         </div>
-                        <input type="number" id="tiempo" value="8760" oninput="calcularFactor()"
-                            class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
+                    </div>
+
+                    <!-- Input: Tiempo en Horas (Afectado por la periodicidad) -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Tiempo (Horas)</label>
+                        <div class="relative rounded-xl shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <input type="number" id="tiempo" value="8760" oninput="calcularFactor()"
+                                class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
+                        </div>
                     </div>
                 </div>
 
@@ -100,17 +118,34 @@
 
     <!-- Footer con Logo Real de Modo Energía -->
     <footer class="flex flex-col items-center justify-center pb-6 space-y-2">
-        <!-- Logo circular usando la imagen subida al repositorio (image_a36668.jpg renombrada a logo.jpg) -->
+        <!-- Logo circular mapeado directamente al archivo logo.jpeg del repositorio -->
         <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-500 shadow-md bg-white flex items-center justify-center">
-            <img src="logo.jpg" alt="Logo Modo Energía" class="w-full h-full object-cover">
+            <img src="logo.jpeg" alt="Logo Modo Energía" class="w-full h-full object-cover">
         </div>
         <div class="text-center text-xs font-bold tracking-wide text-gray-400 uppercase">
             Modo Energía © 2026
         </div>
     </footer>
 
-    <!-- Lógica de Cálculo y Compartir en JavaScript -->
+    <!-- Lógica de Cálculo y Automatización en JavaScript -->
     <script>
+        // Función para cambiar las horas automáticamente según el período seleccionado
+        function actualizarHorasPorPeriodo() {
+            const periodicidad = document.getElementById('periodicidad').value;
+            const tiempoInput = document.getElementById('tiempo');
+
+            if (periodicidad === "anual") {
+                tiempoInput.value = 8760; // 365 días * 24 horas
+            } else if (periodicidad === "mensual") {
+                tiempoInput.value = 730;  // Promedio mensual aproximado (30.4 días)
+            } else if (periodicidad === "diario") {
+                tiempoInput.value = 24;   // 1 día * 24 horas
+            }
+
+            // Recalcular inmediatamente el factor de planta tras el cambio de horas
+            calcularFactor();
+        }
+
         function calcularFactor() {
             // Obtener los valores numéricos
             let energia = parseFloat(document.getElementById('energia').value) || 0;
@@ -124,11 +159,9 @@
             const resultadoElement = document.getElementById('resultado');
 
             // --- NORMALIZACIÓN DE UNIDADES ---
-            // Convertimos la energía a base kWh de manera proporcional
             if (unidadEnergia === "GWh") { energia = energia * 1000000; }
             else if (unidadEnergia === "MWh") { energia = energia * 1000; }
 
-            // Convertimos la potencia a base kW de manera proporcional
             if (unidadPotencia === "GW") { potencia = potencia * 1000000; }
             else if (unidadPotencia === "MW") { potencia = potencia * 1000; }
             // ---------------------------------
@@ -151,11 +184,13 @@
             const unidadEnergia = document.getElementById('unidad_energia').value;
             const potencia = document.getElementById('potencia').value;
             const unidadPotencia = document.getElementById('unidad_potencia').value;
+            const periodicidad = document.getElementById('periodicidad').options[document.getElementById('periodicidad').selectedIndex].text;
             const tiempo = document.getElementById('tiempo').value;
             const resultado = document.getElementById('resultado').innerText;
 
-            // Formatear el mensaje con negritas y emojis optimizados para chats
+            // Formatear el mensaje incluyendo el nuevo dato de periodicidad analizada
             const mensaje = `*Cálculo de Factor de Planta FV* ☀️🔌%0A%0A` +
+                            `• *Período:* ${periodicidad}%0A` +
                             `• *Energía:* ${energia} ${unidadEnergia}%0A` +
                             `• *Potencia:* ${potencia} ${unidadPotencia}%0A` +
                             `• *Tiempo:* ${tiempo} horas%0A%0A` +
