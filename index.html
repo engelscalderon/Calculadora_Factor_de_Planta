@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Factor de Planta FV</title>
-    <!-- Tailwind CSS para el diseño visual -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <!-- FontAwesome para los íconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between antialiased font-sans">
 
-    <!-- Contenedor Principal -->
     <div class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
             
-            <!-- Encabezado con estética de energía solar -->
             <div class="bg-gradient-to-r from-yellow-500 to-amber-600 p-6 text-white text-center shadow-md">
                 <div class="inline-flex items-center justify-center p-3 bg-white bg-opacity-20 rounded-2xl mb-3">
                     <i class="fa-solid fa-solar-panel text-3xl"></i>
@@ -24,10 +20,8 @@
                 <p class="text-xs text-amber-100 mt-1 font-medium">Calculadora para Plantas Fotovoltaicas</p>
             </div>
 
-            <!-- Formulario y Controles -->
             <div class="p-6 space-y-5">
                 
-                <!-- Input: Energía Generada con Selector de Magnitud -->
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Energía Generada</label>
                     <div class="flex space-x-2">
@@ -38,7 +32,6 @@
                             <input type="number" id="energia" value="198000" oninput="calcularFactor()"
                                 class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
-                        <!-- Desplegable Magnitud Energía -->
                         <select id="unidad_energia" onchange="calcularFactor()" 
                             class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
                             <option value="GWh">GWh</option>
@@ -48,7 +41,6 @@
                     </div>
                 </div>
 
-                <!-- Input: Potencia Nominal con Selector de Magnitud -->
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Potencia Instalada / Nominal</label>
                     <div class="flex space-x-2">
@@ -59,7 +51,6 @@
                             <input type="number" id="potencia" value="87.8" step="0.1" oninput="calcularFactor()"
                                 class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
-                        <!-- Desplegable Magnitud Potencia -->
                         <select id="unidad_potencia" onchange="calcularFactor()" 
                             class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
                             <option value="GW">GW</option>
@@ -70,7 +61,6 @@
                 </div>
 
                 <div class="border-t border-gray-100 pt-4 grid grid-cols-2 gap-3">
-                    <!-- Selector: Periodicidad del Periodo -->
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Periodicidad</label>
                         <div class="relative rounded-xl shadow-sm">
@@ -86,26 +76,23 @@
                         </div>
                     </div>
 
-                    <!-- Input: Tiempo en Horas (Afectado por la periodicidad) -->
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Tiempo (Horas)</label>
                         <div class="relative rounded-xl shadow-sm">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                 <i class="fa-solid fa-clock"></i>
                             </div>
-                            <input type="number" id="tiempo" value="8760" oninput="calcularFactor()"
-                                class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
+                            <input type="number" id="tiempo" value="8760" readonly
+                                class="block w-full pl-10 pr-3 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 font-bold outline-none select-none">
                         </div>
                     </div>
                 </div>
 
-                <!-- Bloque de Resultado -->
                 <div class="mt-6 p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-100 text-center shadow-inner">
                     <span class="block text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Factor de Planta Resultante</span>
                     <span id="resultado" class="text-5xl font-black text-amber-600 tracking-tight">25.74%</span>
                 </div>
 
-                <!-- Botón para Compartir por WhatsApp -->
                 <button onclick="compartirWhatsApp()" 
                     class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 transform active:scale-95">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
@@ -116,18 +103,15 @@
         </div>
     </div>
 
-    <!-- Footer con Logo Real de Modo Energía -->
     <footer class="flex flex-col items-center justify-center pb-6 space-y-2">
-        <!-- Logo circular mapeado directamente al archivo logo.jpeg del repositorio -->
         <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-500 shadow-md bg-white flex items-center justify-center">
-            <img src="logo.jpeg" alt="Logo Modo Energía" class="w-full h-full object-cover">
+            <img src="logo.jpg" alt="Logo Modo Energía" class="w-full h-full object-cover">
         </div>
         <div class="text-center text-xs font-bold tracking-wide text-gray-400 uppercase">
             Modo Energía © 2026
         </div>
     </footer>
 
-    <!-- Lógica de Cálculo y Automatización en JavaScript -->
     <script>
         // Función para cambiar las horas automáticamente según el período seleccionado
         function actualizarHorasPorPeriodo() {
