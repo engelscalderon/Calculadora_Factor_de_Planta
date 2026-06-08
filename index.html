@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Factor de Planta FV</title>
+    <!-- Tailwind CSS para el diseño visual -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- FontAwesome para los íconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between antialiased font-sans">
 
+    <!-- Contenedor Principal -->
     <div class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
             
+            <!-- Encabezado con estética de energía solar -->
             <div class="bg-gradient-to-r from-yellow-500 to-amber-600 p-6 text-white text-center shadow-md">
                 <div class="inline-flex items-center justify-center p-3 bg-white bg-opacity-20 rounded-2xl mb-3">
                     <i class="fa-solid fa-solar-panel text-3xl"></i>
@@ -20,8 +24,10 @@
                 <p class="text-xs text-amber-100 mt-1 font-medium">Calculadora para Plantas Fotovoltaicas</p>
             </div>
 
+            <!-- Formulario y Controles -->
             <div class="p-6 space-y-5">
                 
+                <!-- Input: Energía Generada con Selector de Magnitud -->
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Energía Generada</label>
                     <div class="flex space-x-2">
@@ -32,8 +38,9 @@
                             <input type="number" id="energia" value="198000" oninput="calcularFactor()"
                                 class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
+                        <!-- Desplegable Magnitud Energía -->
                         <select id="unidad_energia" onchange="calcularFactor()" 
-                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
                             <option value="GWh">GWh</option>
                             <option value="MWh" selected>MWh</option>
                             <option value="kWh">kWh</option>
@@ -41,6 +48,7 @@
                     </div>
                 </div>
 
+                <!-- Input: Potencia Nominal con Selector de Magnitud -->
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Potencia Instalada / Nominal</label>
                     <div class="flex space-x-2">
@@ -51,8 +59,9 @@
                             <input type="number" id="potencia" value="87.8" step="0.1" oninput="calcularFactor()"
                                 class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
+                        <!-- Desplegable Magnitud Potencia -->
                         <select id="unidad_potencia" onchange="calcularFactor()" 
-                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
                             <option value="GW">GW</option>
                             <option value="MW" selected>MW</option>
                             <option value="kW">kW</option>
@@ -60,6 +69,7 @@
                     </div>
                 </div>
 
+                <!-- Input: Tiempo -->
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Tiempo del Periodo (Horas)</label>
                     <div class="relative rounded-xl shadow-sm">
@@ -71,11 +81,13 @@
                     </div>
                 </div>
 
+                <!-- Bloque de Resultado -->
                 <div class="mt-6 p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-100 text-center shadow-inner">
                     <span class="block text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Factor de Planta Resultante</span>
                     <span id="resultado" class="text-5xl font-black text-amber-600 tracking-tight">25.74%</span>
                 </div>
 
+                <!-- Botón para Compartir por WhatsApp -->
                 <button onclick="compartirWhatsApp()" 
                     class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 transform active:scale-95">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
@@ -86,15 +98,18 @@
         </div>
     </div>
 
+    <!-- Footer con Logo Real de Modo Energía -->
     <footer class="flex flex-col items-center justify-center pb-6 space-y-2">
-        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-500 shadow-md bg-amber-500 flex items-center justify-center text-white font-bold text-lg tracking-tighter">
-            ME
+        <!-- Logo circular usando la imagen subida al repositorio (image_a36668.jpg renombrada a logo.jpg) -->
+        <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-500 shadow-md bg-white flex items-center justify-center">
+            <img src="logo.jpg" alt="Logo Modo Energía" class="w-full h-full object-cover">
         </div>
         <div class="text-center text-xs font-bold tracking-wide text-gray-400 uppercase">
             Modo Energía © 2026
         </div>
     </footer>
 
+    <!-- Lógica de Cálculo y Compartir en JavaScript -->
     <script>
         function calcularFactor() {
             // Obtener los valores numéricos
@@ -109,25 +124,25 @@
             const resultadoElement = document.getElementById('resultado');
 
             // --- NORMALIZACIÓN DE UNIDADES ---
-            // Llevamos toda la energía a base kWh
+            // Convertimos la energía a base kWh de manera proporcional
             if (unidadEnergia === "GWh") { energia = energia * 1000000; }
             else if (unidadEnergia === "MWh") { energia = energia * 1000; }
 
-            // Llevamos toda la potencia a base kW
+            // Convertimos la potencia a base kW de manera proporcional
             if (unidadPotencia === "GW") { potencia = potencia * 1000000; }
             else if (unidadPotencia === "MW") { potencia = potencia * 1000; }
             // ---------------------------------
 
-            // Evitar divisiones por cero o cálculos inválidos
+            // Evitar divisiones por cero o valores incoherentes
             if (potencia <= 0 || tiempo <= 0 || energia <= 0) {
                 resultadoElement.innerText = "0.00%";
                 return;
             }
 
-            // Aplicar la fórmula matemática (kWh / (kW * horas)) * 100
+            // Aplicar la fórmula matemática (Energía_Norm / (Potencia_Norm * Tiempo)) * 100
             const factorPlanta = (energia / (potencia * tiempo)) * 100;
 
-            // Mostrar el resultado final corregido
+            // Mostrar el resultado final en pantalla con dos decimales
             resultadoElement.innerText = factorPlanta.toFixed(2) + "%";
         }
 
@@ -139,7 +154,7 @@
             const tiempo = document.getElementById('tiempo').value;
             const resultado = document.getElementById('resultado').innerText;
 
-            // Redactar el mensaje predefinido con formato de WhatsApp incluyendo las unidades elegidas
+            // Formatear el mensaje con negritas y emojis optimizados para chats
             const mensaje = `*Cálculo de Factor de Planta FV* ☀️🔌%0A%0A` +
                             `• *Energía:* ${energia} ${unidadEnergia}%0A` +
                             `• *Potencia:* ${potencia} ${unidadPotencia}%0A` +
@@ -150,7 +165,7 @@
             window.open(`https://api.whatsapp.com/send?text=${mensaje}`, '_blank');
         }
 
-        // Ejecutar el cálculo inicial al cargar la página
+        // Forzar el primer cálculo al cargar la página por completo
         window.onload = calcularFactor;
     </script>
 </body>
