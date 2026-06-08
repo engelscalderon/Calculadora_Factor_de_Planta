@@ -23,26 +23,41 @@
             <div class="p-6 space-y-5">
                 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Energía Generada (MWh o kWh)</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                            <i class="fa-solid fa-bolt"></i>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Energía Generada</label>
+                    <div class="flex space-x-2">
+                        <div class="relative rounded-xl shadow-sm flex-grow">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <input type="number" id="energia" value="198000" oninput="calcularFactor()"
+                                class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
-                        <input type="number" id="energia" value="198000" oninput="calcularFactor()"
-                            class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
+                        <select id="unidad_energia" onchange="calcularFactor()" 
+                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="GWh">GWh</option>
+                            <option value="MWh" selected>MWh</option>
+                            <option value="kWh">kWh</option>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Potencia Nominal (MW o kW)</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                            <i class="fa-solid fa-charging-station"></i>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Potencia Instalada / Nominal</label>
+                    <div class="flex space-x-2">
+                        <div class="relative rounded-xl shadow-sm flex-grow">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-charging-station"></i>
+                            </div>
+                            <input type="number" id="potencia" value="87.8" step="0.1" oninput="calcularFactor()"
+                                class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
                         </div>
-                        <input type="number" id="potencia" value="87.8" step="0.1" oninput="calcularFactor()"
-                            class="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white text-gray-800 font-medium transition-all">
+                        <select id="unidad_potencia" onchange="calcularFactor()" 
+                            class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="GW">GW</option>
+                            <option value="MW" selected>MW</option>
+                            <option value="kW">kW</option>
+                        </select>
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">* Asegúrate de usar las mismas unidades (ej. MWh y MW).</p>
                 </div>
 
                 <div>
@@ -71,48 +86,67 @@
         </div>
     </div>
 
-    <footer class="text-center pb-4 text-xs font-semibold tracking-wide text-gray-400 uppercase">
-         © 2026
+    <footer class="flex flex-col items-center justify-center pb-6 space-y-2">
+        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-500 shadow-md bg-amber-500 flex items-center justify-center text-white font-bold text-lg tracking-tighter">
+            ME
+        </div>
+        <div class="text-center text-xs font-bold tracking-wide text-gray-400 uppercase">
+            Modo Energía © 2026
+        </div>
     </footer>
 
     <script>
         function calcularFactor() {
-            // Obtener los valores ingresados por el usuario
-            const energia = parseFloat(document.getElementById('energia').value) || 0;
-            const potencia = parseFloat(document.getElementById('potencia').value) || 0;
+            // Obtener los valores numéricos
+            let energia = parseFloat(document.getElementById('energia').value) || 0;
+            let potencia = parseFloat(document.getElementById('potencia').value) || 0;
             const tiempo = parseFloat(document.getElementById('tiempo').value) || 0;
             
+            // Obtener las magnitudes seleccionadas
+            const unidadEnergia = document.getElementById('unidad_energia').value;
+            const unidadPotencia = document.getElementById('unidad_potencia').value;
+
             const resultadoElement = document.getElementById('resultado');
+
+            // --- NORMALIZACIÓN DE UNIDADES ---
+            // Llevamos toda la energía a base kWh
+            if (unidadEnergia === "GWh") { energia = energia * 1000000; }
+            else if (unidadEnergia === "MWh") { energia = energia * 1000; }
+
+            // Llevamos toda la potencia a base kW
+            if (unidadPotencia === "GW") { potencia = potencia * 1000000; }
+            else if (unidadPotencia === "MW") { potencia = potencia * 1000; }
+            // ---------------------------------
 
             // Evitar divisiones por cero o cálculos inválidos
             if (potencia <= 0 || tiempo <= 0 || energia <= 0) {
                 resultadoElement.innerText = "0.00%";
-                return 0;
+                return;
             }
 
-            // Aplicar la fórmula matemática del Excel
+            // Aplicar la fórmula matemática (kWh / (kW * horas)) * 100
             const factorPlanta = (energia / (potencia * tiempo)) * 100;
 
-            // Mostrar el resultado formateado a dos puntos decimales
+            // Mostrar el resultado final corregido
             resultadoElement.innerText = factorPlanta.toFixed(2) + "%";
-            return factorPlanta.toFixed(2);
         }
 
         function compartirWhatsApp() {
             const energia = document.getElementById('energia').value;
+            const unidadEnergia = document.getElementById('unidad_energia').value;
             const potencia = document.getElementById('potencia').value;
+            const unidadPotencia = document.getElementById('unidad_potencia').value;
             const tiempo = document.getElementById('tiempo').value;
             const resultado = document.getElementById('resultado').innerText;
 
-            // Redactar el mensaje predefinido con formato de WhatsApp
+            // Redactar el mensaje predefinido con formato de WhatsApp incluyendo las unidades elegidas
             const mensaje = `*Cálculo de Factor de Planta FV* ☀️🔌%0A%0A` +
-                            `• *Energía:* ${energia} %0A` +
-                            `• *Potencia:* ${potencia} %0A` +
+                            `• *Energía:* ${energia} ${unidadEnergia}%0A` +
+                            `• *Potencia:* ${potencia} ${unidadPotencia}%0A` +
                             `• *Tiempo:* ${tiempo} horas%0A%0A` +
                             `📊 *Factor de Planta Resultante:* *${resultado}*%0A%0A` +
-                            `_Calculado _`;
+                            `_Calculado con Modo Energía_`;
 
-            // Abrir la API de WhatsApp con el mensaje listo
             window.open(`https://api.whatsapp.com/send?text=${mensaje}`, '_blank');
         }
 
